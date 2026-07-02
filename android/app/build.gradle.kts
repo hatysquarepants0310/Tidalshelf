@@ -29,8 +29,8 @@ android {
         applicationId = "app.tidalshelf.scrobbler"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.1.1"
+        versionCode = 4
+        versionName = "1.1.2"
         buildConfigField("String", "LASTFM_API_KEY", "\"$lastfmApiKey\"")
         buildConfigField("String", "LASTFM_API_SECRET", "\"$lastfmApiSecret\"")
     }
@@ -39,9 +39,26 @@ android {
         buildConfig = true
     }
 
+    // Llave commiteada en el repo para que TODOS los builds (CI, local, de
+    // cualquier colaborador) firmen igual y las actualizaciones se instalen
+    // encima sin desinstalar. Mismo modelo de confianza que la clave de API:
+    // el ancla es el repo, no el secreto.
+    signingConfigs {
+        create("shared") {
+            storeFile = file("../keystore.jks")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("shared")
+        }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("shared")
         }
     }
 

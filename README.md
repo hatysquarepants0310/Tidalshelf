@@ -22,8 +22,8 @@ Spotify ──────────(conexión nativa de Shelf)─────
 ```
 
 Corre siempre en segundo plano (servicio de acceso a notificaciones, cola offline con
-reintentos). Instalación y detalles en [`android/README.md`](android/README.md). El APK se
-compila automáticamente en GitHub Actions.
+reintentos). **[Descargar APK (Releases)](../../releases/latest)** · Instalación y detalles en
+[`android/README.md`](android/README.md).
 
 ## Componente 2: el puente de escritorio (`bridge/`)
 

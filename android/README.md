@@ -28,9 +28,9 @@ Tidal suena en tu teléfono
 
 ## Instalación
 
-**Opción A (recomendada):** descarga el APK del último build en la pestaña
-[Actions](../../actions) del repo (artifact `tidalshelf-scrobbler-debug`) e instálalo. Android te
-pedirá permitir "instalar apps desconocidas".
+**Opción A (recomendada):** descarga `app-release.apk` desde la página de
+[**Releases**](../../releases/latest) — link público, sin cuenta de GitHub — e instálalo.
+Android te pedirá permitir "instalar apps desconocidas".
 
 **Opción B:** compílalo tú: abre `android/` en Android Studio, o por consola:
 

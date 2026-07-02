@@ -3,9 +3,8 @@ name: Android APK
 on:
   push:
     branches: ["main", "claude/**"]
-    paths: ["android/**", ".github/workflows/android.yml"]
+    tags: ["v*"]
   pull_request:
-    paths: ["android/**", ".github/workflows/android.yml"]
   workflow_dispatch:
 
 jobs:
@@ -23,17 +22,23 @@ jobs:
         with:
           gradle-version: "8.14.3"
 
-      - name: Build debug APK
+      - name: Build APK
         working-directory: android
-        env:
-          # Opcional: crea estos secrets en el repo (Settings -> Secrets) con una
-          # clave de https://www.last.fm/api/account/create para que el APK traiga
-          # el login de Last.fm de un toque. Sin ellos, la app pide la clave.
-          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-          LASTFM_API_SECRET: ${{ secrets.LASTFM_API_SECRET }}
-        run: gradle assembleDebug
+        run: gradle assembleRelease
 
       - uses: actions/upload-artifact@v4
         with:
-          name: tidalshelf-scrobbler-debug
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: tidalshelf-scrobbler
+          path: android/app/build/outputs/apk/release/app-release.apk
+
+      # En cada tag v* se publica un Release con el APK, para que cualquiera
+      # lo descargue sin cuenta de GitHub: <repo>/releases/latest
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: android/app/build/outputs/apk/release/app-release.apk
+          generate_release_notes: true
+
+    permissions:
+      contents: write
