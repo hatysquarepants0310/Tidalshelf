@@ -44,6 +44,8 @@
     <string name="notif_channel_desc">Canción en reproducción y confirmación de que la app corre en segundo plano</string>
     <string name="notif_waiting_threshold">Sonando… se registra al llegar a la mitad</string>
     <string name="notif_scrobbled">Registrada ✓ (Last.fm / YT Music)</string>
+    <string name="notif_idle_title">Scrobbler activo</string>
+    <string name="notif_idle_text">Esperando música en Tidal…</string>
 
     <string name="card_status_title">Actividad</string>
     <string name="status_activity">Última pista: %1$s\n\nDetectadas: %2$d\nEnviadas a Last.fm: %3$d\nRegistradas en YT Music: %4$d\nSin match en YT: %5$d\nEn cola: %6$d</string>

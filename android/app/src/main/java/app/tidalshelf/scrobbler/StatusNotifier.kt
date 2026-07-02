@@ -34,16 +34,9 @@ object StatusNotifier {
         }
     }
 
-    fun update(ctx: Context, artist: String, title: String, playing: Boolean, scrobbled: Boolean) {
+    private fun post(ctx: Context, title: String, text: String) {
         if (!Prefs.statusNotifEnabled(ctx)) return
         ensureChannel(ctx)
-
-        val stateIcon = if (playing) "▶" else "⏸"
-        val text = if (scrobbled) {
-            ctx.getString(R.string.notif_scrobbled)
-        } else {
-            ctx.getString(R.string.notif_waiting_threshold)
-        }
         val tapIntent = PendingIntent.getActivity(
             ctx, 0,
             Intent(ctx, MainActivity::class.java),
@@ -51,7 +44,7 @@ object StatusNotifier {
         )
         val notification = NotificationCompat.Builder(ctx, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notif)
-            .setContentTitle("$stateIcon $artist — $title")
+            .setContentTitle(title)
             .setContentText(text)
             .setContentIntent(tapIntent)
             .setOngoing(true)
@@ -64,6 +57,21 @@ object StatusNotifier {
         } catch (e: SecurityException) {
             // sin permiso POST_NOTIFICATIONS (Android 13+): se pide desde la UI
         }
+    }
+
+    /** Sin música: confirma que el servicio vive y espera a Tidal. */
+    fun idle(ctx: Context) {
+        post(ctx, ctx.getString(R.string.notif_idle_title), ctx.getString(R.string.notif_idle_text))
+    }
+
+    fun update(ctx: Context, artist: String, title: String, playing: Boolean, scrobbled: Boolean) {
+        val stateIcon = if (playing) "▶" else "⏸"
+        val text = if (scrobbled) {
+            ctx.getString(R.string.notif_scrobbled)
+        } else {
+            ctx.getString(R.string.notif_waiting_threshold)
+        }
+        post(ctx, "$stateIcon $artist — $title", text)
     }
 
     fun cancel(ctx: Context) {

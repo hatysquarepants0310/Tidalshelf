@@ -55,6 +55,7 @@ class TidalMediaListener : NotificationListenerService() {
 
     override fun onListenerConnected() {
         ScrobbleEngine.init(this)
+        StatusNotifier.idle(this) // señal inmediata de que el servicio vive
         val component = ComponentName(this, TidalMediaListener::class.java)
         try {
             val manager = getSystemService(MediaSessionManager::class.java)

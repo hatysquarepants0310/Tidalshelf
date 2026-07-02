@@ -74,15 +74,18 @@ class MainActivity : AppCompatActivity() {
         notifStatusSwitch.setOnCheckedChangeListener { _, checked ->
             Prefs.setStatusNotifEnabled(this, checked)
             if (checked) {
-                ensureNotifPermission()
+                if (!ensureNotifPermission()) StatusNotifier.idle(this)
             } else {
                 StatusNotifier.cancel(this)
             }
         }
-        if (Prefs.statusNotifEnabled(this)) ensureNotifPermission()
+        if (Prefs.statusNotifEnabled(this) && !ensureNotifPermission()) {
+            StatusNotifier.idle(this)
+        }
     }
 
-    private fun ensureNotifPermission() {
+    /** Pide POST_NOTIFICATIONS si falta (Android 13+). Devuelve true si lo pidió. */
+    private fun ensureNotifPermission(): Boolean {
         if (Build.VERSION.SDK_INT >= 33 &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
             PackageManager.PERMISSION_GRANTED
@@ -90,6 +93,22 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100
             )
+            return true
+        }
+        return false
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 100 &&
+            grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED &&
+            Prefs.statusNotifEnabled(this)
+        ) {
+            StatusNotifier.idle(this)
         }
     }
 

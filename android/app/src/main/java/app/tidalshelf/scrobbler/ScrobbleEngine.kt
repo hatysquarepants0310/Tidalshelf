@@ -102,7 +102,7 @@ object ScrobbleEngine {
         handler.post {
             finalizeCurrent()
             current = null
-            appContext?.let { StatusNotifier.cancel(it) }
+            appContext?.let { StatusNotifier.idle(it) }
         }
     }
 
@@ -111,7 +111,7 @@ object ScrobbleEngine {
         val ctx = appContext ?: return
         val curr = current
         if (curr == null) {
-            StatusNotifier.cancel(ctx)
+            StatusNotifier.idle(ctx)
         } else {
             StatusNotifier.update(
                 ctx, curr.artist, curr.title,
