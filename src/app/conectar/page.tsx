@@ -44,9 +44,18 @@ export default function ConectarPage() {
         <li className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
           <h2 className="font-medium">2. Conecta Tidal y Spotify a Last.fm</h2>
           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-            Desde la app de Tidal: <em>Ajustes → Cuenta → Enlazar cuentas → Last.fm</em>. Desde
-            Spotify: <em>Ajustes → Redes sociales → Last.fm</em>. Last.fm también tiene una guía
-            oficial con los pasos actualizados para cada app:
+            Tidal en iOS y escritorio: <em>Ajustes → Enlazar cuentas → Last.fm</em>. Ojo: la app
+            de Tidal para <strong>Android</strong> ya no trae esa integración — instala{" "}
+            <a
+              className="underline"
+              href="https://play.google.com/store/apps/details?id=com.arn.scrobble"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Pano Scrobbler
+            </a>{" "}
+            (gratis), que scrobblea a Last.fm lo que suene en el teléfono. Desde Spotify:{" "}
+            <em>Ajustes → Redes sociales → Last.fm</em>. Guía oficial de Last.fm:
           </p>
           <a
             className="mt-2 inline-block text-sm underline"

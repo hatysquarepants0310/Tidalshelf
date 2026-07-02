@@ -22,8 +22,17 @@ por partida doble.
 
 ## Configuración (una sola vez)
 
-1. **Conecta Tidal a Last.fm**: en la app de Tidal → Ajustes → Enlazar cuentas → Last.fm.
-   (Si no tienes cuenta de Last.fm: [last.fm/join](https://www.last.fm/join), es gratis.)
+1. **Haz que Tidal scrobblee a Last.fm** — el método depende del dispositivo, porque Tidal
+   quitó la integración nativa de la app de Android (en iOS y escritorio sigue existiendo).
+   Si no tienes cuenta de Last.fm: [last.fm/join](https://www.last.fm/join), es gratis.
+
+   | Dónde escuchas Tidal | Cómo scrobblear |
+   |---|---|
+   | **Android** | Instala [Pano Scrobbler](https://play.google.com/store/apps/details?id=com.arn.scrobble) (gratis): lee la notificación de reproducción del sistema y scrobblea a Last.fm todo lo que suene, Tidal incluido. Conéctale tu cuenta de Last.fm y en sus ajustes deja habilitada solo la app de Tidal (para no scrobblear también Spotify y duplicar en Shelf). |
+   | **iPhone/iPad** | La integración nativa sigue: app de Tidal → Perfil → ⚙️ → Last.fm. |
+   | **PC/Mac (app o web)** | Integración nativa: Ajustes de Tidal → Enlazar cuentas → Last.fm. Para el reproductor web también sirve la extensión [Web Scrobbler](https://web-scrobbler.com/). |
+
+   El puente no distingue de dónde vino el scrobble — con que llegue a Last.fm, fluye a Shelf.
 
 2. **Consigue una clave de API de Last.fm** (gratis, un formulario):
    [last.fm/api/account/create](https://www.last.fm/api/account/create)
