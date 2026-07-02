@@ -18,6 +18,10 @@ object StatusNotifier {
     private const val CHANNEL_ID = "status"
     private const val NOTIF_ID = 1
 
+    // último contenido mostrado, para reponer la notificación si la deslizan
+    @Volatile private var lastTitle: String? = null
+    @Volatile private var lastText: String? = null
+
     private fun ensureChannel(ctx: Context) {
         val manager = ctx.getSystemService(NotificationManager::class.java)
         if (manager.getNotificationChannel(CHANNEL_ID) == null) {
@@ -37,9 +41,19 @@ object StatusNotifier {
     private fun post(ctx: Context, title: String, text: String) {
         if (!Prefs.statusNotifEnabled(ctx)) return
         ensureChannel(ctx)
+        lastTitle = title
+        lastText = text
         val tapIntent = PendingIntent.getActivity(
             ctx, 0,
             Intent(ctx, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        // Si la deslizan, NotifDeleteReceiver la repone: mientras el switch de
+        // la app esté encendido, la notificación no se puede quitar (setOngoing
+        // ya no basta desde Android 14).
+        val deleteIntent = PendingIntent.getBroadcast(
+            ctx, 1,
+            Intent(ctx, NotifDeleteReceiver::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
         val notification = NotificationCompat.Builder(ctx, CHANNEL_ID)
@@ -47,6 +61,7 @@ object StatusNotifier {
             .setContentTitle(title)
             .setContentText(text)
             .setContentIntent(tapIntent)
+            .setDeleteIntent(deleteIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setSilent(true)
@@ -57,6 +72,13 @@ object StatusNotifier {
         } catch (e: SecurityException) {
             // sin permiso POST_NOTIFICATIONS (Android 13+): se pide desde la UI
         }
+    }
+
+    /** Repone el último estado conocido (llamado cuando el usuario la desliza). */
+    fun repost(ctx: Context) {
+        val title = lastTitle
+        val text = lastText
+        if (title != null && text != null) post(ctx, title, text) else idle(ctx)
     }
 
     /** Sin música: confirma que el servicio vive y espera a Tidal. */

@@ -29,6 +29,10 @@
             android:name=".LastfmAuthActivity"
             android:exported="false" />
 
+        <receiver
+            android:name=".NotifDeleteReceiver"
+            android:exported="false" />
+
         <service
             android:name=".TidalMediaListener"
             android:exported="false"

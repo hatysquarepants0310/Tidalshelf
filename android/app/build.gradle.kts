@@ -29,8 +29,8 @@ android {
         applicationId = "app.tidalshelf.scrobbler"
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.2.1"
+        versionCode = 7
+        versionName = "1.2.2"
         buildConfigField("String", "LASTFM_API_KEY", "\"$lastfmApiKey\"")
         buildConfigField("String", "LASTFM_API_SECRET", "\"$lastfmApiSecret\"")
     }
