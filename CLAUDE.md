@@ -6,15 +6,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Tidalshelf gives a user a public profile (`/u/[username]`) that shows their music listening
-history pulled from **Spotify and Tidal combined**. Neither service exposes a cross-platform or
-third-party-readable listening history API — in particular, Tidal has no public API for reading
-a user's play history at all (their developer terms explicitly forbid mining it). The one thing
-both apps can scrobble to natively is **Last.fm**, so this app never talks to Spotify or Tidal
-directly: users link both apps to Last.fm themselves (steps are on the `/conectar` page), then
-enter their Last.fm username in Tidalshelf settings, and the app reads recent tracks / top albums
-/ top artists live from Last.fm's public API. Don't try to add direct Spotify/Tidal OAuth
-integrations without revisiting this constraint.
+The end goal: make Tidal listens show up in tracking apps (specifically **Shelf**) that only
+support Spotify and YouTube Music. Two hard constraints shape everything here: Tidal has no
+public API for reading a user's play history (their developer terms explicitly forbid mining
+it), and Spotify's API cannot *write* plays into a user's history. The only sanctioned outlet
+Tidal has is scrobbling to **Last.fm**. Don't add direct Spotify/Tidal OAuth integrations
+without revisiting these constraints.
+
+Two components:
+
+1. **`bridge/` (the core deliverable)** — a standalone Python daemon
+   (`bridge/tidal_to_ytmusic.py`, stdlib + `requests` + `ytmusicapi`, no packaging). It polls
+   Last.fm for new scrobbles (which come from Tidal), fuzzy-matches each track on YouTube Music,
+   and registers it in the user's YT Music listening history *without playing it* (via
+   `ytmusicapi`'s `get_song` + `add_history_item`). Shelf reads YT Music history, so Tidal plays
+   appear in Shelf. Users must link **only Tidal** (not Spotify) to Last.fm — Shelf already reads
+   Spotify natively, so bridging Spotify scrobbles too would double-count. A `state.json`
+   watermark (`last_uts`) prevents reprocessing; the first run only sets the watermark so old
+   history isn't bulk-dumped. Unmatched tracks go to `misses.log` rather than registering a wrong
+   song. `--dry-run` works without YT Music auth (anonymous session; note `filter="songs"`
+   returns empty anonymously, hence the unfiltered-search fallback in `find_best_match`).
+
+2. **The Next.js web app** — an optional public-profile viewer (`/u/[username]`) showing recent
+   tracks / top albums / top artists read live from Last.fm's public API.
 
 ## Commands
 

@@ -1,15 +1,34 @@
 # Tidalshelf
 
-Un perfil público que junta tu historial de escucha de **Spotify** y **Tidal** en un solo lugar
-— algo que ninguna de las dos apps hace por su cuenta.
+Herramientas para que **todo lo que escuchas en Tidal quede registrado** aunque tus apps de
+tracking (como Shelf) solo soporten Spotify y YouTube Music.
 
-## Por qué existe
+## El problema
 
-Tidal no tiene una API pública para leer el historial de escucha de un usuario (sus términos de
-desarrollador lo prohíben explícitamente), y la API de Spotify solo cubre Spotify. El único
-servicio al que ambas apps pueden scrobblear de forma nativa es [Last.fm](https://www.last.fm).
-Tidalshelf no se conecta directamente a Spotify ni a Tidal: usa Last.fm como puente neutral y lee
-de ahí con su API pública. Los pasos para conectar cada app están en `/conectar` dentro de la app.
+Shelf y apps similares leen tu historial de Spotify y YouTube Music, pero no el de Tidal — y no
+pueden: Tidal no tiene API pública de historial de escucha (sus términos de desarrollador lo
+prohíben explícitamente), y la API de Spotify no permite escribirle escuchas externas. Lo único
+que Tidal sí permite oficialmente es scrobblear a [Last.fm](https://www.last.fm).
+
+## Componente 1: el puente Tidal → Shelf (`bridge/`)
+
+**Lo principal.** Un script que lee tus scrobbles de Tidal desde Last.fm y registra cada canción
+en tu **historial de YouTube Music** (sin reproducirla). Como Shelf lee YT Music, tus escuchas de
+Tidal aparecen en Shelf automáticamente:
+
+```
+Tidal ──(oficial)──> Last.fm ──(bridge)──> historial YT Music ──> Shelf
+Spotify ────────────────(conexión nativa de Shelf)─────────────> Shelf
+```
+
+Instrucciones completas en [`bridge/README.md`](bridge/README.md).
+
+## Componente 2: perfil web unificado (opcional)
+
+Una app web (este repo, Next.js) con perfiles públicos que muestran reproducciones recientes,
+top álbumes y top artistas leyendo directo de Last.fm — útil si quieres una vista combinada
+Tidal+Spotify sin depender de Shelf. Los pasos para conectar cada app están en `/conectar`
+dentro de la propia app.
 
 ## Stack
 
@@ -18,7 +37,7 @@ de ahí con su API pública. Los pasos para conectar cada app están en `/conect
 - Sesiones firmadas con `iron-session`, contraseñas con `bcryptjs`
 - Datos de escucha en vivo desde la API pública de Last.fm
 
-## Desarrollo local
+## Desarrollo local (app web)
 
 1. Copia `.env.example` a `.env` y completa:
    - `LASTFM_API_KEY`: clave gratuita en https://www.last.fm/api/account/create

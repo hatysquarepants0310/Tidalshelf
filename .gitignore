@@ -39,6 +39,14 @@ yarn-error.log*
 # local sqlite database
 /data/
 
+# bridge: credenciales y estado local
+/bridge/browser.json
+/bridge/oauth.json
+/bridge/state.json
+/bridge/misses.log
+/bridge/bridge.log
+/bridge/__pycache__/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
