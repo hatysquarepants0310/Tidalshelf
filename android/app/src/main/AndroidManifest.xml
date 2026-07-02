@@ -24,6 +24,10 @@
             android:name=".YtLoginActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".LastfmAuthActivity"
+            android:exported="false" />
+
         <service
             android:name=".TidalMediaListener"
             android:exported="false"

@@ -57,15 +57,45 @@ class LastfmClient(private val apiKey: String, private val apiSecret: String) {
         }
     }
 
-    /** Devuelve (username, sessionKey). La sesión de Last.fm no caduca. */
-    fun getMobileSession(username: String, password: String): Pair<String, String> {
-        val json = post(
-            mapOf(
-                "method" to "auth.getMobileSession",
-                "username" to username,
-                "password" to password,
-                "api_key" to apiKey,
-            )
+    private fun get(params: Map<String, String>): JSONObject {
+        val signed = params + ("api_sig" to sign(params))
+        val urlBuilder = StringBuilder("$API_ROOT?format=json")
+        signed.forEach { (k, v) ->
+            urlBuilder.append('&').append(k).append('=')
+                .append(java.net.URLEncoder.encode(v, "UTF-8"))
+        }
+        val request = Request.Builder().url(urlBuilder.toString()).get().build()
+        http.newCall(request).execute().use { response ->
+            val text = response.body?.string() ?: ""
+            val json = try {
+                JSONObject(text)
+            } catch (e: Exception) {
+                throw LastfmException("Respuesta ilegible de Last.fm (HTTP ${response.code})")
+            }
+            if (json.has("error")) {
+                throw LastfmApiError(json.optInt("error"), json.optString("message"))
+            }
+            return json
+        }
+    }
+
+    class LastfmApiError(val code: Int, message: String) : Exception(message)
+
+    /**
+     * Flujo de autorización web (el cómodo): la app pide un token, el usuario
+     * lo aprueba en last.fm con un toque, y el token aprobado se canjea por la
+     * sesión. El usuario nunca escribe su contraseña dentro de la app.
+     */
+    fun getToken(): String =
+        get(mapOf("method" to "auth.getToken", "api_key" to apiKey)).getString("token")
+
+    fun authUrl(token: String): String =
+        "https://www.last.fm/api/auth/?api_key=$apiKey&token=$token"
+
+    /** Error 14 mientras el usuario no haya aprobado todavía. */
+    fun getSession(token: String): Pair<String, String> {
+        val json = get(
+            mapOf("method" to "auth.getSession", "api_key" to apiKey, "token" to token)
         )
         val session = json.getJSONObject("session")
         return session.getString("name") to session.getString("key")

@@ -42,9 +42,14 @@ cd android && gradle assembleDebug
 ## Configuración (los 4 pasos de la pantalla principal)
 
 1. **Acceso a notificaciones** — obligatorio; es como la app ve qué suena en Tidal.
-2. **Last.fm** (opcional) — necesitas una [clave de API gratuita](https://www.last.fm/api/account/create).
-   Tu contraseña no se guarda: se usa una sola vez para obtener la sesión (así funciona el
-   protocolo oficial de Last.fm para apps móviles).
+2. **Last.fm** (opcional) — un toque: se abre last.fm, inicias sesión y le das «Allow». Tu
+   contraseña nunca se escribe dentro de la app (flujo de autorización web oficial de Last.fm).
+   *Nota para quien compila el APK*: para que ese login de un toque funcione, el APK debe
+   compilarse con una clave de API integrada — crea una gratis en
+   [last.fm/api/account/create](https://www.last.fm/api/account/create) y ponla en los secrets
+   del repo (`LASTFM_API_KEY` / `LASTFM_API_SECRET`) o en variables de entorno al compilar. Si el
+   APK no trae clave, la app la pide una única vez (2 campos, sin contraseña) y de ahí en
+   adelante el login sigue siendo de un toque.
 3. **YouTube Music** — inicia sesión con tu cuenta de Google en el WebView integrado. La app solo
    guarda las cookies de music.youtube.com, localmente. (Si el login de Google se pone difícil en
    WebView, hay opción avanzada de pegar la cookie a mano.)

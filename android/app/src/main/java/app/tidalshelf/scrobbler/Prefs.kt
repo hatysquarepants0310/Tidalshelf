@@ -11,8 +11,12 @@ object Prefs {
         ctx.applicationContext.getSharedPreferences(FILE, Context.MODE_PRIVATE)
 
     // --- Last.fm ---
-    fun lastfmApiKey(ctx: Context): String = sp(ctx).getString("lastfm_api_key", "") ?: ""
-    fun lastfmApiSecret(ctx: Context): String = sp(ctx).getString("lastfm_api_secret", "") ?: ""
+    // La clave integrada al compilar tiene prioridad salvo que el usuario haya
+    // guardado la suya propia.
+    fun lastfmApiKey(ctx: Context): String =
+        sp(ctx).getString("lastfm_api_key", "")!!.ifEmpty { BuildConfig.LASTFM_API_KEY }
+    fun lastfmApiSecret(ctx: Context): String =
+        sp(ctx).getString("lastfm_api_secret", "")!!.ifEmpty { BuildConfig.LASTFM_API_SECRET }
     fun lastfmSessionKey(ctx: Context): String = sp(ctx).getString("lastfm_sk", "") ?: ""
     fun lastfmUsername(ctx: Context): String = sp(ctx).getString("lastfm_user", "") ?: ""
 

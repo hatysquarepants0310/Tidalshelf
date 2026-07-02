@@ -25,6 +25,12 @@ jobs:
 
       - name: Build debug APK
         working-directory: android
+        env:
+          # Opcional: crea estos secrets en el repo (Settings -> Secrets) con una
+          # clave de https://www.last.fm/api/account/create para que el APK traiga
+          # el login de Last.fm de un toque. Sin ellos, la app pide la clave.
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+          LASTFM_API_SECRET: ${{ secrets.LASTFM_API_SECRET }}
         run: gradle assembleDebug
 
       - uses: actions/upload-artifact@v4

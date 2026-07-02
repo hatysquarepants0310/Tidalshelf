@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
-import android.text.InputType
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -17,12 +14,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
-import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
-
-    private val executor = Executors.newSingleThreadExecutor()
-    private val mainHandler = Handler(Looper.getMainLooper())
 
     private lateinit var notifStatus: TextView
     private lateinit var notifButton: Button
@@ -134,25 +127,24 @@ class MainActivity : AppCompatActivity() {
     // --- Last.fm ---
 
     private fun showLastfmLogin() {
+        if (Prefs.lastfmApiKey(this).isNotEmpty() && Prefs.lastfmApiSecret(this).isNotEmpty()) {
+            // clave disponible (integrada en el APK o guardada): directo a
+            // autorizar con un toque en la web de Last.fm
+            startActivity(Intent(this, LastfmAuthActivity::class.java))
+            return
+        }
+        // APK compilado sin clave integrada: pedirla una sola vez (sin contraseña)
         val container = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             val pad = (16 * resources.displayMetrics.density).toInt()
             setPadding(pad, pad, pad, 0)
         }
-        fun field(hint: Int, password: Boolean = false, prefill: String = ""): EditText =
-            EditText(this).apply {
-                setHint(hint)
-                setText(prefill)
-                if (password) {
-                    inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                }
-                container.addView(this)
-            }
-
-        val apiKeyField = field(R.string.hint_api_key, prefill = Prefs.lastfmApiKey(this))
-        val apiSecretField = field(R.string.hint_api_secret, prefill = Prefs.lastfmApiSecret(this))
-        val userField = field(R.string.hint_username)
-        val passField = field(R.string.hint_password, password = true)
+        fun field(hint: Int): EditText = EditText(this).apply {
+            setHint(hint)
+            container.addView(this)
+        }
+        val apiKeyField = field(R.string.hint_api_key)
+        val apiSecretField = field(R.string.hint_api_secret)
 
         AlertDialog.Builder(this)
             .setTitle(R.string.lastfm_login_title)
@@ -160,41 +152,16 @@ class MainActivity : AppCompatActivity() {
             .setView(container)
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.action_connect) { _, _ ->
-                doLastfmLogin(
-                    apiKeyField.text.toString().trim(),
-                    apiSecretField.text.toString().trim(),
-                    userField.text.toString().trim(),
-                    passField.text.toString(),
-                )
+                val apiKey = apiKeyField.text.toString().trim()
+                val apiSecret = apiSecretField.text.toString().trim()
+                if (apiKey.isEmpty() || apiSecret.isEmpty()) {
+                    Toast.makeText(this, R.string.error_fields_required, Toast.LENGTH_LONG).show()
+                } else {
+                    Prefs.setLastfmCreds(this, apiKey, apiSecret)
+                    startActivity(Intent(this, LastfmAuthActivity::class.java))
+                }
             }
             .show()
-    }
-
-    private fun doLastfmLogin(apiKey: String, apiSecret: String, user: String, pass: String) {
-        if (apiKey.isEmpty() || apiSecret.isEmpty() || user.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, R.string.error_fields_required, Toast.LENGTH_LONG).show()
-            return
-        }
-        Toast.makeText(this, R.string.connecting, Toast.LENGTH_SHORT).show()
-        executor.execute {
-            try {
-                val (name, sessionKey) = LastfmClient(apiKey, apiSecret).getMobileSession(user, pass)
-                Prefs.setLastfmCreds(this, apiKey, apiSecret)
-                Prefs.setLastfmSession(this, name, sessionKey)
-                mainHandler.post {
-                    Toast.makeText(
-                        this, getString(R.string.lastfm_connected, name), Toast.LENGTH_LONG
-                    ).show()
-                    refresh()
-                }
-            } catch (e: Exception) {
-                mainHandler.post {
-                    Toast.makeText(
-                        this, getString(R.string.error_generic, e.message), Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-        }
     }
 
     private fun confirmLastfmLogout() {

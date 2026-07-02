@@ -12,13 +12,12 @@
 
     <string name="card_lastfm_title">2 · Last.fm (opcional)</string>
     <string name="status_lastfm_ok">✅ Conectado como %1$s.</string>
-    <string name="status_lastfm_missing">Sin conectar. Scrobblea tus escuchas de Tidal a tu perfil de Last.fm.</string>
+    <string name="status_lastfm_missing">Sin conectar. Toca Conectar, inicia sesión en last.fm y dale «Allow» — nada más.</string>
     <string name="lastfm_login_title">Conectar Last.fm</string>
-    <string name="lastfm_login_message">Necesitas una clave de API gratuita: last.fm/api/account/create. La contraseña no se guarda; solo se usa una vez para obtener la sesión.</string>
+    <string name="lastfm_login_message">Este APK se compiló sin clave de API integrada. Crea una gratis en last.fm/api/account/create y pégala aquí (solo esta vez); después autorizas con un toque.</string>
     <string name="hint_api_key">API key</string>
     <string name="hint_api_secret">Shared secret</string>
-    <string name="hint_username">Usuario de Last.fm</string>
-    <string name="hint_password">Contraseña</string>
+    <string name="error_no_api_key">No hay clave de API de Last.fm configurada.</string>
     <string name="lastfm_connected">Conectado a Last.fm como %1$s</string>
     <string name="confirm_disconnect_lastfm">¿Desconectar Last.fm? Las escuchas nuevas dejarán de scrobblearse.</string>
 
