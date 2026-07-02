@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Paso 1: acceso a notificaciones -->
+        <TextView style="@style/CardTitle" android:text="@string/card_notif_title" />
+        <TextView style="@style/CardBody" android:id="@+id/notif_status" />
+        <Button style="@style/CardButton" android:id="@+id/notif_button" />
+
+        <!-- Paso 2: Last.fm -->
+        <TextView style="@style/CardTitle" android:text="@string/card_lastfm_title" />
+        <TextView style="@style/CardBody" android:id="@+id/lastfm_status" />
+        <Button style="@style/CardButton" android:id="@+id/lastfm_button" />
+
+        <!-- Paso 3: YouTube Music -->
+        <TextView style="@style/CardTitle" android:text="@string/card_yt_title" />
+        <TextView style="@style/CardBody" android:id="@+id/yt_status" />
+        <Button style="@style/CardButton" android:id="@+id/yt_button" />
+        <Button
+            style="@style/CardButtonSecondary"
+            android:id="@+id/yt_paste_button"
+            android:text="@string/action_paste_cookie" />
+
+        <!-- Paso 4: batería -->
+        <TextView style="@style/CardTitle" android:text="@string/card_battery_title" />
+        <TextView style="@style/CardBody" android:id="@+id/battery_status" />
+        <Button
+            style="@style/CardButton"
+            android:id="@+id/battery_button"
+            android:text="@string/action_battery_exempt" />
+
+        <!-- Estado -->
+        <TextView style="@style/CardTitle" android:text="@string/card_status_title" />
+        <TextView style="@style/CardBody" android:id="@+id/activity_status" />
+        <Button
+            style="@style/CardButtonSecondary"
+            android:id="@+id/flush_button"
+            android:text="@string/action_flush" />
+    </LinearLayout>
+</ScrollView>

@@ -13,9 +13,23 @@ it), and Spotify's API cannot *write* plays into a user's history. The only sanc
 Tidal has is scrobbling to **Last.fm**. Don't add direct Spotify/Tidal OAuth integrations
 without revisiting these constraints.
 
-Two components:
+Three components:
 
-1. **`bridge/` (the core deliverable)** — a standalone Python daemon
+0. **`android/` (the flagship)** — a Kotlin Android app ("Tidalshelf Scrobbler",
+   `app.tidalshelf.scrobbler`) that removes the PC requirement entirely. A
+   `NotificationListenerService` reads Tidal's MediaSession (package `com.aspiro.tidal`) and
+   feeds `ScrobbleEngine`, which applies standard Last.fm rules (>30s track, scrobble at 50% or
+   4min, timestamp = play start) and enqueues into a SQLite-backed offline queue flushed by
+   WorkManager. Two outputs per play: Last.fm scrobble (user-supplied API key/secret,
+   `auth.getMobileSession`) and YT Music history registration — a Kotlin port of ytmusicapi's
+   protocol (SAPISIDHASH auth from WebView-captured cookies, innertube `search`/`player`
+   endpoints, playback-tracking URL GET; the songs-filter param `EgWKAQIIAWoMEA4QChADEAQQCRAF`
+   and the fuzzy matcher mirror `bridge/tidal_to_ytmusic.py` — keep both in sync). Build with
+   `cd android && gradle assembleDebug` (AGP 8.7.3, needs `local.properties` with `sdk.dir` or
+   `ANDROID_HOME`); CI builds the APK via `.github/workflows/android.yml`. No test suite; it has
+   never been run on a physical device — treat device reports as the source of truth.
+
+1. **`bridge/` (desktop alternative)** — a standalone Python daemon
    (`bridge/tidal_to_ytmusic.py`, stdlib + `requests` + `ytmusicapi`, no packaging). It polls
    Last.fm for new scrobbles (which come from Tidal), fuzzy-matches each track on YouTube Music,
    and registers it in the user's YT Music listening history *without playing it* (via

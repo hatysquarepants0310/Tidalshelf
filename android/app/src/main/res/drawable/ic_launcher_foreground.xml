@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- onda simple: Tidal fluye hacia el historial -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,62 q7.5,-12 15,0 q7.5,12 15,0 q7.5,-12 15,0 q7.5,12 15,0 l0,6 q-7.5,12 -15,0 q-7.5,-12 -15,0 q-7.5,12 -15,0 q-7.5,-12 -15,0 z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M70,34 m-6,0 a6,6 0 1,1 12,0 a6,6 0 1,1 -12,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M74,16 l2,0 l0,18 l-2,0 z" />
+</vector>

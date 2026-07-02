@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tidalshelf Scrobbler</string>
+
+    <string name="intro">Detecta lo que suena en Tidal en este teléfono y lo registra en Last.fm y en tu historial de YouTube Music (para que aparezca en Shelf). Completa los pasos:</string>
+
+    <string name="card_notif_title">1 · Acceso a notificaciones</string>
+    <string name="status_notif_ok">✅ Concedido. La app puede ver la reproducción de Tidal.</string>
+    <string name="status_notif_missing">❌ Falta. Sin esto no se puede detectar qué suena en Tidal. Toca el botón y activa «Tidalshelf Scrobbler».</string>
+    <string name="action_grant">Conceder acceso</string>
+    <string name="action_open_settings">Abrir ajustes</string>
+
+    <string name="card_lastfm_title">2 · Last.fm (opcional)</string>
+    <string name="status_lastfm_ok">✅ Conectado como %1$s.</string>
+    <string name="status_lastfm_missing">Sin conectar. Scrobblea tus escuchas de Tidal a tu perfil de Last.fm.</string>
+    <string name="lastfm_login_title">Conectar Last.fm</string>
+    <string name="lastfm_login_message">Necesitas una clave de API gratuita: last.fm/api/account/create. La contraseña no se guarda; solo se usa una vez para obtener la sesión.</string>
+    <string name="hint_api_key">API key</string>
+    <string name="hint_api_secret">Shared secret</string>
+    <string name="hint_username">Usuario de Last.fm</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="lastfm_connected">Conectado a Last.fm como %1$s</string>
+    <string name="confirm_disconnect_lastfm">¿Desconectar Last.fm? Las escuchas nuevas dejarán de scrobblearse.</string>
+
+    <string name="card_yt_title">3 · YouTube Music (para Shelf)</string>
+    <string name="status_yt_ok">✅ Conectado. Las escuchas de Tidal se registran en tu historial de YT Music.</string>
+    <string name="status_yt_missing">Sin conectar. Inicia sesión con tu cuenta de Google para escribir en tu historial de YT Music.</string>
+    <string name="yt_login_ok">YouTube Music conectado ✓</string>
+    <string name="confirm_disconnect_yt">¿Desconectar YouTube Music? Las escuchas nuevas dejarán de registrarse en el historial.</string>
+    <string name="action_paste_cookie">Avanzado: pegar cookie</string>
+    <string name="yt_paste_title">Pegar cookie de music.youtube.com</string>
+    <string name="yt_paste_message">Si el login integrado no funciona: en un navegador de escritorio con sesión iniciada en music.youtube.com, copia el header Cookie completo de cualquier petición (DevTools → Network) y pégalo aquí.</string>
+    <string name="hint_yt_cookie">Cookie: …__Secure-3PAPISID=…</string>
+    <string name="error_cookie_invalid">Esa cookie no contiene __Secure-3PAPISID.</string>
+
+    <string name="card_battery_title">4 · Batería</string>
+    <string name="status_battery_ok">✅ Sin restricciones. Android no matará la app en segundo plano.</string>
+    <string name="status_battery_missing">Recomendado: excluye la app de la optimización de batería para que nunca se detenga.</string>
+    <string name="action_battery_exempt">Excluir de optimización</string>
+
+    <string name="card_status_title">Actividad</string>
+    <string name="status_activity">Última pista: %1$s\n\nDetectadas: %2$d\nEnviadas a Last.fm: %3$d\nRegistradas en YT Music: %4$d\nSin match en YT: %5$d\nEn cola: %6$d</string>
+    <string name="action_flush">Reintentar pendientes ahora</string>
+    <string name="flush_scheduled">Envío programado</string>
+
+    <string name="action_connect">Conectar</string>
+    <string name="action_disconnect">Desconectar</string>
+    <string name="action_save">Guardar</string>
+    <string name="connecting">Conectando…</string>
+    <string name="error_fields_required">Completa todos los campos.</string>
+    <string name="error_generic">Error: %1$s</string>
+</resources>

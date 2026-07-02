@@ -10,20 +10,29 @@ pueden: Tidal no tiene API pública de historial de escucha (sus términos de de
 prohíben explícitamente), y la API de Spotify no permite escribirle escuchas externas. Lo único
 que Tidal sí permite oficialmente es scrobblear a [Last.fm](https://www.last.fm).
 
-## Componente 1: el puente Tidal → Shelf (`bridge/`)
+## Componente 1: la app Android (`android/`) — lo principal
 
-**Lo principal.** Un script que lee tus scrobbles de Tidal desde Last.fm y registra cada canción
-en tu **historial de YouTube Music** (sin reproducirla). Como Shelf lee YT Music, tus escuchas de
-Tidal aparecen en Shelf automáticamente:
+**Tidalshelf Scrobbler**: detecta en el propio teléfono lo que suena en Tidal (vía MediaSession,
+como cualquier scrobbler) y lo registra en dos destinos, sin PC ni servidor:
 
 ```
-Tidal ──(oficial)──> Last.fm ──(bridge)──> historial YT Music ──> Shelf
-Spotify ────────────────(conexión nativa de Shelf)─────────────> Shelf
+Tidal suena en tu teléfono ──┬──> Last.fm (scrobbler clásico, opcional)
+                             └──> historial de YouTube Music ──> Shelf
+Spotify ──────────(conexión nativa de Shelf)───────────────────> Shelf
 ```
 
-Instrucciones completas en [`bridge/README.md`](bridge/README.md).
+Corre siempre en segundo plano (servicio de acceso a notificaciones, cola offline con
+reintentos). Instalación y detalles en [`android/README.md`](android/README.md). El APK se
+compila automáticamente en GitHub Actions.
 
-## Componente 2: perfil web unificado (opcional)
+## Componente 2: el puente de escritorio (`bridge/`)
+
+La alternativa sin app: un script Python que lee tus scrobbles de Tidal desde Last.fm y registra
+cada canción en tu historial de YT Music. Útil si prefieres correrlo en una Raspberry/servidor o
+si usas Tidal principalmente en PC/iOS (donde la integración Tidal → Last.fm sigue siendo nativa).
+Instrucciones en [`bridge/README.md`](bridge/README.md).
+
+## Componente 3: perfil web unificado (opcional)
 
 Una app web (este repo, Next.js) con perfiles públicos que muestran reproducciones recientes,
 top álbumes y top artistas leyendo directo de Last.fm — útil si quieres una vista combinada
