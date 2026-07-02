@@ -1,16 +1,25 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
 // Clave de API de Last.fm integrada en el APK para que el usuario final solo
-// tenga que tocar "Autorizar" (flujo web). Se toma de -PlastfmApiKey=... o de
-// las variables de entorno LASTFM_API_KEY / LASTFM_API_SECRET al compilar
-// (en CI vienen de los secrets del repo). Si faltan, la app pide la clave.
+// tenga que tocar "Autorizar" (flujo web). Prioridad: -PlastfmApiKey=... >
+// variables de entorno > android/lastfm.properties (commiteado en el repo).
+val lastfmProps = Properties().apply {
+    val file = rootProject.file("lastfm.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
 val lastfmApiKey: String =
-    (project.findProperty("lastfmApiKey") as String?) ?: System.getenv("LASTFM_API_KEY") ?: ""
+    (project.findProperty("lastfmApiKey") as String?)
+        ?: System.getenv("LASTFM_API_KEY")?.takeIf { it.isNotEmpty() }
+        ?: lastfmProps.getProperty("apiKey", "")
 val lastfmApiSecret: String =
-    (project.findProperty("lastfmApiSecret") as String?) ?: System.getenv("LASTFM_API_SECRET") ?: ""
+    (project.findProperty("lastfmApiSecret") as String?)
+        ?: System.getenv("LASTFM_API_SECRET")?.takeIf { it.isNotEmpty() }
+        ?: lastfmProps.getProperty("apiSecret", "")
 
 android {
     namespace = "app.tidalshelf.scrobbler"
@@ -20,8 +29,8 @@ android {
         applicationId = "app.tidalshelf.scrobbler"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.1.1"
         buildConfigField("String", "LASTFM_API_KEY", "\"$lastfmApiKey\"")
         buildConfigField("String", "LASTFM_API_SECRET", "\"$lastfmApiSecret\"")
     }
