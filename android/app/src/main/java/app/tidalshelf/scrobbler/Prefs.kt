@@ -37,6 +37,11 @@ object Prefs {
     fun clearYtCookie(ctx: Context) = sp(ctx).edit().remove("yt_cookie").apply()
     fun ytEnabled(ctx: Context): Boolean = ytCookie(ctx).contains("__Secure-3PAPISID")
 
+    // --- Notificación de estado ---
+    fun statusNotifEnabled(ctx: Context): Boolean = sp(ctx).getBoolean("status_notif", true)
+    fun setStatusNotifEnabled(ctx: Context, value: Boolean) =
+        sp(ctx).edit().putBoolean("status_notif", value).apply()
+
     // --- Estado para la UI ---
     fun lastTrack(ctx: Context): String = sp(ctx).getString("status_last_track", "") ?: ""
     fun setLastTrack(ctx: Context, value: String) =

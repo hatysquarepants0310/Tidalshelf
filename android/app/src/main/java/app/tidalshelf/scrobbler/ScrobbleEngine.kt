@@ -74,6 +74,7 @@ object ScrobbleEngine {
             )
             Log.i(TAG, "Nueva pista: $artist - $title (${durationMs / 1000}s)")
             appContext?.let { Prefs.setLastTrack(it, "$artist — $title") }
+            notifyStatus()
         }
     }
 
@@ -93,6 +94,7 @@ object ScrobbleEngine {
                 accumulate(curr)
                 handler.removeCallbacks(thresholdRunnable)
             }
+            notifyStatus()
         }
     }
 
@@ -100,6 +102,22 @@ object ScrobbleEngine {
         handler.post {
             finalizeCurrent()
             current = null
+            appContext?.let { StatusNotifier.cancel(it) }
+        }
+    }
+
+    /** Refleja el estado actual en la notificación opcional. */
+    private fun notifyStatus() {
+        val ctx = appContext ?: return
+        val curr = current
+        if (curr == null) {
+            StatusNotifier.cancel(ctx)
+        } else {
+            StatusNotifier.update(
+                ctx, curr.artist, curr.title,
+                playing = curr.resumedAtElapsed != null,
+                scrobbled = curr.scrobbled,
+            )
         }
     }
 
@@ -135,6 +153,7 @@ object ScrobbleEngine {
         if (curr.durationMs in 1 until MIN_TRACK_SEC * 1000L) return
         curr.scrobbled = true
         enqueue(curr)
+        notifyStatus()
     }
 
     private fun finalizeCurrent() {

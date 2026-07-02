@@ -37,6 +37,14 @@
     <string name="status_battery_missing">Recomendado: excluye la app de la optimización de batería para que nunca se detenga.</string>
     <string name="action_battery_exempt">Excluir de optimización</string>
 
+    <string name="card_notifstatus_title">5 · Notificación de estado</string>
+    <string name="card_notifstatus_desc">Muestra en la barra de notificaciones qué canción va sonando y confirma que el scrobbler sigue vivo en segundo plano. Silenciosa. Apágala si no la quieres.</string>
+    <string name="notifstatus_switch_label">Mostrar notificación</string>
+    <string name="notif_channel_name">Estado del scrobbler</string>
+    <string name="notif_channel_desc">Canción en reproducción y confirmación de que la app corre en segundo plano</string>
+    <string name="notif_waiting_threshold">Sonando… se registra al llegar a la mitad</string>
+    <string name="notif_scrobbled">Registrada ✓ (Last.fm / YT Music)</string>
+
     <string name="card_status_title">Actividad</string>
     <string name="status_activity">Última pista: %1$s\n\nDetectadas: %2$d\nEnviadas a Last.fm: %3$d\nRegistradas en YT Music: %4$d\nSin match en YT: %5$d\nEn cola: %6$d</string>
     <string name="action_flush">Reintentar pendientes ahora</string>

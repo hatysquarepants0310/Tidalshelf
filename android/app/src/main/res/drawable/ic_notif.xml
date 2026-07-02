@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- nota musical simple, monocroma como exige la barra de estado -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,3 L19,4.5 L19,7.5 L14,6.4 L14,16 a3.5,3.5 0 1,1 -2,-3.16 L12,3 z" />
+</vector>

@@ -1,8 +1,11 @@
 package app.tidalshelf.scrobbler
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
@@ -13,7 +16,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var batteryButton: Button
     private lateinit var activityStatus: TextView
     private lateinit var flushButton: Button
+    private lateinit var notifStatusSwitch: SwitchCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +67,29 @@ class MainActivity : AppCompatActivity() {
         flushButton.setOnClickListener {
             ScrobbleEngine.scheduleFlush(this)
             Toast.makeText(this, R.string.flush_scheduled, Toast.LENGTH_SHORT).show()
+        }
+
+        notifStatusSwitch = findViewById(R.id.notifstatus_switch)
+        notifStatusSwitch.isChecked = Prefs.statusNotifEnabled(this)
+        notifStatusSwitch.setOnCheckedChangeListener { _, checked ->
+            Prefs.setStatusNotifEnabled(this, checked)
+            if (checked) {
+                ensureNotifPermission()
+            } else {
+                StatusNotifier.cancel(this)
+            }
+        }
+        if (Prefs.statusNotifEnabled(this)) ensureNotifPermission()
+    }
+
+    private fun ensureNotifPermission() {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100
+            )
         }
     }
 

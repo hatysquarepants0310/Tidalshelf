@@ -43,6 +43,16 @@
             android:id="@+id/battery_button"
             android:text="@string/action_battery_exempt" />
 
+        <!-- Notificación de estado -->
+        <TextView style="@style/CardTitle" android:text="@string/card_notifstatus_title" />
+        <TextView style="@style/CardBody" android:text="@string/card_notifstatus_desc" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/notifstatus_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/notifstatus_switch_label" />
+
         <!-- Estado -->
         <TextView style="@style/CardTitle" android:text="@string/card_status_title" />
         <TextView style="@style/CardBody" android:id="@+id/activity_status" />
